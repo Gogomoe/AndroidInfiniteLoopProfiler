@@ -2,6 +2,7 @@ package moe.gogo
 
 import com.beust.klaxon.Klaxon
 import moe.gogo.jfr.MemoryRecordReader
+import moe.gogo.report.ReportGenerator
 import moe.gogo.report.Result
 import java.io.File
 import java.time.Duration
@@ -41,6 +42,7 @@ fun main() {
         ssacfgExtractTime,
         MemoryRecordReader(ssacfgExtractDir.resolve("recording.jfr")).load()
     )
+    ReportGenerator(result).generate()
 
 }
 

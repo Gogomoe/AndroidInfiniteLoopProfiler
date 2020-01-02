@@ -16,5 +16,5 @@ data class Result(
     val ssacfgExtractMemory: MemoryRecord
 ) {
     val moduleCallMaxHeap: Long = moduleCallMemory.record.map { it.used }.max()!!
-    val ssacfgExtractHeap: Long = ssacfgExtractMemory.record.map { it.used }.max()!!
+    val ssacfgExtractMaxHeap: Long = ssacfgExtractMemory.record.map { it.used }.max()!!
 }

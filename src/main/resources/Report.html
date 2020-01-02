@@ -8,86 +8,25 @@
 
 </head>
 <body>
-<div id="memory-chart" style="width: 600px;height:400px;"></div>
+<section>
+    <h1>Summary</h1>
+</section>
+<section>
+    <h1>Module Call</h1>
+    <p>Cost Time: {{module-call-time}}</p>
+    <p>Max Heap Used: {{module-call-max-heap}}</p>
+    <div id="module-call-memory" style="width: 600px;height:400px;"></div>
+</section>
+<section>
+    <h1>SSA CFG Extract</h1>
+    <p>Cost Time: {{ssa-cfg-extract-time}}</p>
+    <p>Max Heap Used: {{ssa-cfg-extract-max-heap}}</p>
+    <div id="ssa-cfg-extract-memory" style="width: 600px;height:400px;"></div>
+</section>
+
 </body>
 <script>
-    echarts.init(document.getElementById('memory-chart')).setOption({
-        title: {
-            text: 'Heap'
-        },
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'cross',
-                label: {
-                    backgroundColor: '#6a7985'
-                }
-            }
-        },
-        legend: {
-            data: ['Committed', 'Used']
-        },
-        toolbox: {
-            feature: {
-                saveAsImage: {}
-            }
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        xAxis: [
-            {
-                type: 'time',
-                boundaryGap: false
-            }
-        ],
-        yAxis: [
-            {
-                type: 'value',
-                axisLabel: {
-                    formatter: function (value) {
-                        return numeral(value).format('0b');
-                    }
-                }
-            }
-        ],
-        series: [
-            {
-                name: 'Committed',
-                type: 'line',
-                label: {
-                    show: true,
-                    formatter: function (params) {
-                        return numeral(params.value[1]).format('0.0b');
-                    }
-                },
-                areaStyle: {
-                    color: "rgba(239, 83, 80)"
-                },
-                data: [
-                    {{memory-committed}}
-                ]
-            },
-            {
-                name: 'Used',
-                type: 'line',
-                label: {
-                    show: true,
-                    formatter: function (params) {
-                        return numeral(params.value[1]).format('0.0b');
-                    }
-                },
-                areaStyle: {
-                    color: "rgba(97, 97, 97, 1)"
-                },
-                data: [
-                    {{memory-used}}
-                ]
-            }
-        ]
-    });
+    {{module-call-memory-chart-js}}
+    {{ssa-cfg-extract-memory-chart-js}}
 </script>
 </html>
