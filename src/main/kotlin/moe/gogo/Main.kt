@@ -4,37 +4,44 @@ import com.beust.klaxon.Klaxon
 import java.io.File
 
 fun main() {
-//    val record = MemoryRecordReader(File("recording.jfr")).load()
-//    ReportGenerator(File("report"), record).generate()
-    val config = Klaxon().parse<Config>(File("config.json"))!!
+    val config = Klaxon()
+        .converter(ConfigConverter)
+        .parse<Config>(File("config.json"))!!
 
     val root = File(config.workingDir)
     root.resolve("module-call").mkdirs()
     root.resolve("ssa-cfg-extract").mkdirs()
 
+    println("========== module-call ==========")
     moduleCallProcessBuilder(config).start().waitFor()
+
+    println("========== ssa-cfg-extract ==========")
     ssacfgExtractProcessBuilder(config).start().waitFor()
 
 }
 
 private fun moduleCallProcessBuilder(config: Config): ProcessBuilder {
     return with(config) {
-        ProcessBuilder(java)
+        ProcessBuilder()
+            .command(
+                java, *vmArgs.toTypedArray(),
+                "-jar", jarFile.from(workingDir), moduleCallName,
+                "-a", androidLib.from(workingDir), "-i", apk.from(workingDir), *moduleCallArgs.toTypedArray()
+            )
             .directory(File(workingDir).resolve("module-call"))
-            .command(vmArgs)
-            .command("-jar", jarFile.from(workingDir), moduleCallName)
-            .command("-a", androidLib.from(workingDir), "-i", apk.from(workingDir), *moduleCallArgs.toTypedArray())
             .inheritIO()
     }
 }
 
 private fun ssacfgExtractProcessBuilder(config: Config): ProcessBuilder {
     return with(config) {
-        ProcessBuilder(java)
-            .directory(File(workingDir))
-            .command(vmArgs)
-            .command("-jar", jarFile.from(workingDir), ssacfgExtractName)
-            .command("-a", androidLib.from(workingDir), "-i", apk.from(workingDir), *ssacfgExtractArgs.toTypedArray())
+        ProcessBuilder()
+            .command(
+                java, *vmArgs.toTypedArray(),
+                "-jar", jarFile.from(workingDir), ssacfgExtractName,
+                "-a", androidLib.from(workingDir), "-i", apk.from(workingDir), *ssacfgExtractArgs.toTypedArray()
+            )
+            .directory(File(workingDir).resolve("ssa-cfg-extract"))
             .inheritIO()
     }
 }

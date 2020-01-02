@@ -1,19 +1,19 @@
 {
-  "java": "path to java8",
-  "working-directory": "working directory",
-  "jar": "path of jar file",
+  "java": "C:\\Program Files\\Java\\jdk1.8.0_231\\bin\\java.exe",
+  "working-directory": "C:\\Users\\gogo\\Desktop\\tmp",
+  "jar": "ssa-cfg-extractor-1.0-SNAPSHOT-jar-with-dependencies.jar",
   "vm-args": [
     "-XX:+UnlockCommercialFeatures",
     "-XX:StartFlightRecording=filename=recording.jfr"
   ],
-  "android-lib": "path to android lib",
-  "apk": "path to apk file",
+  "android-lib": "android.jar",
+  "apk": "app-release-unsigned.apk",
   "module-call": {
     "name": "module-call",
     "args": []
   },
   "ssa-cfg-extract": {
     "name": "ssa-cfg-extract",
-    "args": []
+    "args": ["--override-output"]
   }
 }
