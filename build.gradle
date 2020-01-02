@@ -14,9 +14,9 @@ repositories {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation 'com.beust:klaxon:5.0.1'
-    implementation fileTree(dir: 'mc', include: '*.jar')
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile 'com.beust:klaxon:5.0.1'
+    compile fileTree(dir: 'mc', include: '*.jar')
 }
 
 compileKotlin {
@@ -24,4 +24,24 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'moe.gogo.MainKt'
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    doLast {
+        copy {
+            from 'build/libs/LoopRunner-1.0-SNAPSHOT.jar'
+            into 'script'
+            rename 'LoopRunner-1.0-SNAPSHOT.jar', 'LoopRunner.jar'
+        }
+        copy {
+            from 'config.json'
+            into 'script'
+        }
+    }
 }
