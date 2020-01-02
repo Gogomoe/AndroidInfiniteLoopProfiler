@@ -4,7 +4,7 @@
   "jar": "ssa-cfg-extractor-1.0-SNAPSHOT-jar-with-dependencies.jar",
   "vm-args": [
     "-XX:+UnlockCommercialFeatures",
-    "-XX:StartFlightRecording=filename=recording.jfr"
+    "-XX:StartFlightRecording=filename=recording.jfr,dumponexit=true"
   ],
   "android-lib": "android.jar",
   "apk": "app-release-unsigned.apk",

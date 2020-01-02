@@ -1,4 +1,4 @@
-package moe.gogo
+package moe.gogo.jfr
 
 import java.time.Instant
 

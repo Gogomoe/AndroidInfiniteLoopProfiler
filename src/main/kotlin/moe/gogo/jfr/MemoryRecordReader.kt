@@ -2,8 +2,6 @@ package moe.gogo.jfr
 
 import com.jrockit.mc.flightrecorder.FlightRecordingLoader
 import com.jrockit.mc.flightrecorder.spi.IEvent
-import moe.gogo.MemoryRecord
-import moe.gogo.HeapSample
 import java.io.File
 import java.time.Instant
 

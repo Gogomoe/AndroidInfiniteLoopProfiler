@@ -1,5 +1,7 @@
-package moe.gogo
+package moe.gogo.report
 
+import moe.gogo.jfr.HeapSample
+import moe.gogo.jfr.MemoryRecord
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
