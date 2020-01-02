@@ -1,0 +1,19 @@
+{
+  "java": "path to java8",
+  "working-directory": "working directory",
+  "jar": "path of jar file",
+  "vm-args": [
+    "-XX:+UnlockCommercialFeatures",
+    "-XX:StartFlightRecording=filename=recording.jfr"
+  ],
+  "android-lib": "path to android lib",
+  "apk": "path to apk file",
+  "module-call": {
+    "name": "module-call",
+    "args": []
+  },
+  "ssa-cfg-extract": {
+    "name": "ssa-cfg-extract",
+    "args": []
+  }
+}

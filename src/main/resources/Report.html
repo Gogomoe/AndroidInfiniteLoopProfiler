@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@4.6.0/dist/echarts.min.js"></script>
+
+</head>
+<body>
+<div id="memory-chart" style="width: 600px;height:400px;"></div>
+</body>
+<script>
+    echarts.init(document.getElementById('memory-chart')).setOption({
+        title: {
+            text: 'Heap'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                label: {
+                    backgroundColor: '#6a7985'
+                }
+            }
+        },
+        legend: {
+            data: ['Committed', 'Used']
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [
+            {
+                type: 'time',
+                boundaryGap: false
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                axisLabel: {
+                    formatter: function (value) {
+                        return numeral(value).format('0b');
+                    }
+                }
+            }
+        ],
+        series: [
+            {
+                name: 'Committed',
+                type: 'line',
+                label: {
+                    show: true,
+                    formatter: function (params) {
+                        return numeral(params.value[1]).format('0.0b');
+                    }
+                },
+                areaStyle: {
+                    color: "rgba(239, 83, 80)"
+                },
+                data: [
+                    {{memory-committed}}
+                ]
+            },
+            {
+                name: 'Used',
+                type: 'line',
+                label: {
+                    show: true,
+                    formatter: function (params) {
+                        return numeral(params.value[1]).format('0.0b');
+                    }
+                },
+                areaStyle: {
+                    color: "rgba(97, 97, 97, 1)"
+                },
+                data: [
+                    {{memory-used}}
+                ]
+            }
+        ]
+    });
+</script>
+</html>
