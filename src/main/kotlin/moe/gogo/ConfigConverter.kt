@@ -13,6 +13,7 @@ val ConfigConverter = object : Converter {
         val obj = jv.obj!!
         val moduleCell = obj.obj("module-call")!!
         val ssacfgExtract = obj.obj("ssa-cfg-extract")!!
+        val flameGraph = obj.obj("flame-graph")!!
 
         return Config(
             obj.string("java")!!,
@@ -24,7 +25,12 @@ val ConfigConverter = object : Converter {
             moduleCell.string("name")!!,
             moduleCell.array<String>("args")!!.toList(),
             ssacfgExtract.string("name")!!,
-            ssacfgExtract.array<String>("args")!!.toList()
+            ssacfgExtract.array<String>("args")!!.toList(),
+            flameGraph.boolean("enable")!!,
+            flameGraph.string("jfr-flame-graph")!!,
+            flameGraph.array<String>("jfr-flame-graph-args")!!.toList(),
+            flameGraph.string("flame-graph")!!,
+            flameGraph.array<String>("flame-graph-args")!!.toList()
         )
     }
 

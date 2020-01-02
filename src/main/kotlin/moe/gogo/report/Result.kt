@@ -16,5 +16,9 @@ data class Result(
     val ssacfgExtractMemory: MemoryRecord
 ) {
     val moduleCallMaxHeap: Long = moduleCallMemory.record.map { it.used }.max()!!
+    val moduleCallJFR: File = moduleCallDir.resolve("recording.jfr")
+
     val ssacfgExtractMaxHeap: Long = ssacfgExtractMemory.record.map { it.used }.max()!!
+    val ssacfgExtractJFR: File = ssacfgExtractDir.resolve("recording.jfr")
+
 }

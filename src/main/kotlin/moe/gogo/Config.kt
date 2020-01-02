@@ -10,5 +10,10 @@ data class Config(
     val moduleCallName: String,
     val moduleCallArgs: List<String>,
     val ssacfgExtractName: String,
-    val ssacfgExtractArgs: List<String>
+    val ssacfgExtractArgs: List<String>,
+    val enableFlameGraph: Boolean,
+    val jfrFlameGraph: String,
+    val jfrFlameGraphArgs: List<String>,
+    val flameGraph: String,
+    val flameGraphArgs: List<String>
 )

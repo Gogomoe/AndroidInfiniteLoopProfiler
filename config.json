@@ -1,6 +1,6 @@
 {
-  "java": "C:\\Program Files\\Java\\jdk1.8.0_231\\bin\\java.exe",
-  "working-directory": "C:\\Users\\gogo\\Desktop\\tmp",
+  "java": "C:/Program Files/Java/jdk1.8.0_231/bin/java.exe",
+  "working-directory": "C:/Users/gogo/Desktop/tmp",
   "jar": "ssa-cfg-extractor-1.0-SNAPSHOT-jar-with-dependencies.jar",
   "vm-args": [
     "-XX:+UnlockCommercialFeatures",
@@ -14,6 +14,18 @@
   },
   "ssa-cfg-extract": {
     "name": "ssa-cfg-extract",
-    "args": ["--override-output"]
+    "args": [
+      "--override-output"
+    ]
+  },
+  "flame-graph": {
+    "enable": false,
+    "jfr-flame-graph": "C:/Users/gogo/Desktop/jfr-flame-graph/build/install/jfr-flame-graph/bin/jfr-flame-graph",
+    "jfr-flame-graph-args": [],
+    "flame-graph": "C:/Users/gogo/Desktop/FlameGraph/flamegraph.pl",
+    "flame-graph-args": [
+      "--width",
+      "800"
+    ]
   }
 }
