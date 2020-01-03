@@ -29,4 +29,5 @@ data class SSACFGExtractResult(
 ) {
     val maxHeap: Long = memory.record.map { it.used }.max()!!
     val jfr: File = dir.resolve("recording.jfr")
+    val dot: File = dir.resolve("ssaOutput").resolve("call-graph.dot")
 }
