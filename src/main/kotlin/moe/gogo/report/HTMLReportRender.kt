@@ -7,34 +7,29 @@ class HTMLReportRender(private val result: Result) : ReportRender() {
     override val data: List<Pair<String, () -> String>> = with(result) {
         listOf(
             "{{package-id}}" to { ssacfgExtract.packageId },
-            "{{total-time}}" to { (ssacfgExtract.costTime + moduleCall.costTime).toMillis().toString() },
+            "{{total-time}}" to { ssacfgExtract.costTime.toMillis().toString() },
 
-            "{{module-call-time}}" to { moduleCall.costTime.toMillis().toString() },
-            "{{module-call-max-heap}}" to { moduleCall.maxHeap.toString() },
+            "{{time}}" to { ssacfgExtract.costTime.toMillis().toString() },
+            "{{max-heap}}" to { ssacfgExtract.maxHeap.toString() },
+            "{{apk-class-count}}" to { ssacfgExtract.apkClassCount.toString() },
+            "{{app-class-count}}" to { ssacfgExtract.appClassCount.toString() },
+            "{{loaded-class-count}}" to { ssacfgExtract.loadedClassCount.toString() },
+            "{{recursion-groups-count}}" to { ssacfgExtract.recursionGroupsCount.toString() },
+            "{{recursion-methods-count}}" to { ssacfgExtract.recursionMethodsCount.toString() },
+            "{{module-count}}" to { ssacfgExtract.moduleCount.toString() },
+            "{{module-transition-count}}" to { ssacfgExtract.moduleTransitionCount.toString() },
+            "{{module-recursion-groups-count}}" to { ssacfgExtract.moduleRecursionGroupsCount.toString() },
+            "{{module-recursion-modules-count}}" to { ssacfgExtract.moduleRecursionModuleCount.toString() },
+            "{{method-call-dot-graph-js}}" to {
+                DotGraphRender("method-call-dot-graph", ssacfgExtract.methodCallDot.readText()).render()
+            },
             "{{module-call-dot-graph-js}}" to {
-                DotGraphRender("module-call-dot-graph", moduleCall.dot.readText()).render()
+                DotGraphRender("module-call-dot-graph", ssacfgExtract.moduleCallDot.readText()).render()
             },
-            "{{module-call-memory-chart-js}}" to {
-                MemoryChartRender("module-call-memory", moduleCall.memory).render()
-            },
-            "{{module-call-flame-graph}}" to {
-                FlameGraphRender(config, moduleCall.jfr).generate()
-            },
-
-            "{{ssa-cfg-extract-time}}" to { ssacfgExtract.costTime.toMillis().toString() },
-            "{{ssa-cfg-extract-max-heap}}" to { ssacfgExtract.maxHeap.toString() },
-            "{{ssa-cfg-extract-apk-class-count}}" to { ssacfgExtract.apkClassCount.toString() },
-            "{{ssa-cfg-extract-app-class-count}}" to { ssacfgExtract.appClassCount.toString() },
-            "{{ssa-cfg-extract-loaded-class-count}}" to { ssacfgExtract.loadedClassCount.toString() },
-            "{{ssa-cfg-extract-recursion-groups-count}}" to { ssacfgExtract.recursionGroupsCount.toString() },
-            "{{ssa-cfg-extract-recursion-methods-count}}" to { ssacfgExtract.recursionMethodsCount.toString() },
-            "{{ssa-cfg-extract-graph-js}}" to {
-                DotGraphRender("ssa-cfg-extract-dot-graph", ssacfgExtract.dot.readText()).render()
-            },
-            "{{ssa-cfg-extract-memory-chart-js}}" to {
+            "{{memory-chart-js}}" to {
                 MemoryChartRender("ssa-cfg-extract-memory", ssacfgExtract.memory).render()
             },
-            "{{ssa-cfg-extract-flame-graph}}" to {
+            "{{flame-graph}}" to {
                 FlameGraphRender(config, ssacfgExtract.jfr).generate()
             }
         )

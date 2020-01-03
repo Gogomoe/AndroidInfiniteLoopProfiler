@@ -9,10 +9,6 @@
   ],
   "android-lib": "android.jar",
   "apk": "app-release-unsigned.apk",
-  "module-call": {
-    "name": "module-call",
-    "args": []
-  },
   "ssa-cfg-extract": {
     "name": "ssa-cfg-extract",
     "args": [

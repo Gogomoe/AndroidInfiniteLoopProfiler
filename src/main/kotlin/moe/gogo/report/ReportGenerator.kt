@@ -16,7 +16,7 @@ class ReportGenerator(val result: Result) {
 
         with(result) {
             println("Package ID: ${ssacfgExtract.packageId}")
-            println("Total Cost Time: ${(ssacfgExtract.costTime + moduleCall.costTime).toMillis()}")
+            println("Total Cost Time: ${ssacfgExtract.costTime.toMillis()}")
             println("Loaded Class Count: ${ssacfgExtract.loadedClassCount}")
             println("Recursion Count: ${ssacfgExtract.recursionGroupsCount}")
         }

@@ -13,21 +13,8 @@ data class Result(
     val config: Config,
     val root: File,
     val output: File,
-    val moduleCallDir: File,
-    val ssacfgExtractDir: File,
-    val moduleCall: ModuleCallResult,
     val ssacfgExtract: SSACFGExtractResult
 )
-
-data class ModuleCallResult(
-    val dir: File,
-    val costTime: Duration,
-    val memory: MemoryRecord
-) {
-    val maxHeap: Long = memory.record.map { it.used }.max()!!
-    val jfr: File = dir.resolve("recording.jfr")
-    val dot: File = dir.resolve("ModuleCallGraph.dot")
-}
 
 data class SSACFGExtractResult(
     val dir: File,
@@ -36,7 +23,8 @@ data class SSACFGExtractResult(
 ) {
     val maxHeap: Long = memory.record.map { it.used }.max()!!
     val jfr: File = dir.resolve("recording.jfr")
-    val dot: File = dir.resolve("ssaOutput").resolve("call-graph.dot")
+    val methodCallDot: File = dir.resolve("ssaOutput").resolve("call-graph.dot")
+    val moduleCallDot: File = dir.resolve("ssaOutput").resolve("module-cg.dot")
 
     val packageId: String
     val apkClassCount: Int
@@ -44,6 +32,10 @@ data class SSACFGExtractResult(
     val loadedClassCount: Int
     val recursionGroupsCount: Int
     val recursionMethodsCount: Int
+    val moduleCount: Int
+    val moduleTransitionCount: Int
+    val moduleRecursionGroupsCount: Int
+    val moduleRecursionModuleCount: Int
 
     init {
         val stat: File = dir.resolve("stat.json")
@@ -54,5 +46,9 @@ data class SSACFGExtractResult(
         loadedClassCount = obj["loadedClassCount"].int
         recursionGroupsCount = obj["recursionGroupsCount"].int
         recursionMethodsCount = obj["recursionMethodsCount"].int
+        moduleCount = obj["moduleCount"].int
+        moduleTransitionCount = obj["transitionCount"].int
+        moduleRecursionGroupsCount = obj["moduleRecursionGroupsCount"].int
+        moduleRecursionModuleCount = obj["moduleRecursionModuleCount"].int
     }
 }

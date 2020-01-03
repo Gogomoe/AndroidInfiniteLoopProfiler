@@ -14,36 +14,34 @@
     <h1>Summary</h1>
     <p>Package ID: {{package-id}}</p>
     <p>Total Cost Time: {{total-time}}</p>
-    <p>Loaded Class Count: {{ssa-cfg-extract-loaded-class-count}}</p>
-    <p>Recursion Count: {{ssa-cfg-extract-recursion-groups-count}}</p>
-</section>
-<section id="module-call">
-    <h1>Module Call</h1>
-    <p>Cost Time: {{module-call-time}}</p>
-    <p>Max Heap Used: {{module-call-max-heap}}</p>
-    <div id="module-call-dot-graph"></div>
-    <div id="module-call-memory" style="width: 600px;height:400px;"></div>
-    {{module-call-flame-graph}}
+    <p>Loaded Class Count: {{loaded-class-count}}</p>
+    <p>Loaded Module Count: {{module-count}}</p>
+    <p>Recursion Count: {{recursion-groups-count}}</p>
+    <p>Module Recursion Count: {{module-recursion-groups-count}}</p>
 </section>
 <section id="ssa-cfg-extract">
     <h1>SSA CFG Extract</h1>
-    <p>Cost Time: {{ssa-cfg-extract-time}}</p>
-    <p>Max Heap Used: {{ssa-cfg-extract-max-heap}}</p>
-    <p>Apk Class Count: {{ssa-cfg-extract-apk-class-count}}</p>
-    <p>App Class Count: {{ssa-cfg-extract-app-class-count}}</p>
-    <p>Loaded Class Count: {{ssa-cfg-extract-loaded-class-count}}</p>
-    <p>Recursion Groups Count: {{ssa-cfg-extract-recursion-groups-count}}</p>
-    <p>Recursion Methods Count: {{ssa-cfg-extract-recursion-methods-count}}</p>
-    <div id="ssa-cfg-extract-dot-graph"></div>
+    <p>Cost Time: {{time}}</p>
+    <p>Max Heap Used: {{max-heap}}</p>
+    <p>Apk Class Count: {{apk-class-count}}</p>
+    <p>App Class Count: {{app-class-count}}</p>
+    <p>Loaded Class Count: {{loaded-class-count}}</p>
+    <p>Recursion Groups Count: {{recursion-groups-count}}</p>
+    <p>Recursion Methods Count: {{recursion-methods-count}}</p>
+    <p>Module Count: {{module-count}}</p>
+    <p>Module Transition Count: {{module-transition-count}}</p>
+    <p>Module Recursion Groups Count: {{module-recursion-groups-count}}</p>
+    <p>Module Recursion Methods Count: {{module-recursion-modules-count}}</p>
+    <div id="method-call-dot-graph"><h3>Method Call Graph</h3></div>
+    <div id="module-call-dot-graph"><h3>Module Call Graph</h3></div>
     <div id="ssa-cfg-extract-memory" style="width: 600px;height:400px;"></div>
-    {{ssa-cfg-extract-flame-graph}}
+    {{flame-graph}}
 </section>
 
 </body>
 <script>
-    {{module-call-memory-chart-js}}
-    {{ssa-cfg-extract-memory-chart-js}}
+    {{memory-chart-js}}
+    {{method-call-dot-graph-js}}
     {{module-call-dot-graph-js}}
-    {{ssa-cfg-extract-graph-js}}
 </script>
 </html>

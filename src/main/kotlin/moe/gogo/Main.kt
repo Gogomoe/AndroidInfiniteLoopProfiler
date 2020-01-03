@@ -1,7 +1,6 @@
 package moe.gogo
 
 import moe.gogo.jfr.MemoryRecordReader
-import moe.gogo.report.ModuleCallResult
 import moe.gogo.report.ReportGenerator
 import moe.gogo.report.Result
 import moe.gogo.report.SSACFGExtractResult
@@ -20,16 +19,9 @@ class Main {
     private val config: Config = Config.from(File("config.json"))
     private val root: File = File(config.workingDir)
     private val output: File = outputDir(root, config.outputDir)
-    private val moduleCallDir = output.resolve("module-call").also { it.mkdirs() }
     private val ssacfgExtractDir = output.resolve("ssa-cfg-extract").also { it.mkdirs() }
 
     fun run() {
-        println("========== module-call ==========")
-        val moduleCallProcess = moduleCallProcessBuilder()
-        println(moduleCallProcess.command())
-        val moduleCallTime = calcTime {
-            moduleCallProcess.start().waitFor()
-        }
 
         println("========== ssa-cfg-extract ==========")
         val ssacfgExtractProcess = ssacfgExtractProcessBuilder()
@@ -43,13 +35,6 @@ class Main {
             config,
             root,
             output,
-            moduleCallDir,
-            ssacfgExtractDir,
-            ModuleCallResult(
-                moduleCallDir,
-                moduleCallTime,
-                MemoryRecordReader(moduleCallDir.resolve("recording.jfr")).load()
-            ),
             SSACFGExtractResult(
                 ssacfgExtractDir,
                 ssacfgExtractTime,
@@ -68,20 +53,6 @@ class Main {
         val dirname = regex.replaceFirst(outputDir, format)
 
         return root.resolve(dirname)
-    }
-
-    private fun moduleCallProcessBuilder(): ProcessBuilder {
-        return with(config) {
-            ProcessBuilder()
-                .command(
-                    java, *vmArgs.toTypedArray(),
-                    "-jar", rootTo(jarFile), moduleCallName,
-                    "-a", rootTo(androidLib), "-i", rootTo(apk),
-                    *moduleCallArgs.toTypedArray()
-                )
-                .directory(moduleCallDir)
-                .inheritIO()
-        }
     }
 
     private fun ssacfgExtractProcessBuilder(): ProcessBuilder {
