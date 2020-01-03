@@ -1,6 +1,5 @@
 package moe.gogo
 
-import com.beust.klaxon.Klaxon
 import moe.gogo.jfr.MemoryRecordReader
 import moe.gogo.report.ModuleCallResult
 import moe.gogo.report.ReportGenerator
@@ -11,9 +10,7 @@ import java.time.Duration
 import java.time.Instant
 
 fun main() {
-    val config = Klaxon()
-        .converter(ConfigConverter)
-        .parse<Config>(File("config.json"))!!
+    val config = Config.from(File("config.json"))
 
     val root = File(config.workingDir)
     val moduleCallDir = root.resolve("module-call").also { it.mkdirs() }

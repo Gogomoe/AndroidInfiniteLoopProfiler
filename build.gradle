@@ -15,7 +15,7 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    compile 'com.beust:klaxon:5.0.1'
+    compile 'com.google.code.gson:gson:2.8.6'
     compile fileTree(dir: 'mc', include: '*.jar')
 }
 
