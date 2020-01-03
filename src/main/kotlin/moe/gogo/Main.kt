@@ -8,78 +8,103 @@ import moe.gogo.report.SSACFGExtractResult
 import java.io.File
 import java.time.Duration
 import java.time.Instant
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 fun main() {
-    val config = Config.from(File("config.json"))
+    Main().run()
+}
 
-    val root = File(config.workingDir)
-    val moduleCallDir = root.resolve("module-call").also { it.mkdirs() }
-    val ssacfgExtractDir = root.resolve("ssa-cfg-extract").also { it.mkdirs() }
+class Main {
 
-    println("========== module-call ==========")
-    val moduleCallProcess = moduleCallProcessBuilder(config)
-    println(moduleCallProcess.command())
-    val moduleCallTime = calcTime {
-        moduleCallProcess.start().waitFor()
-    }
+    private val config: Config = Config.from(File("config.json"))
+    private val root: File = File(config.workingDir)
+    private val output: File = outputDir(root, config.outputDir)
+    private val moduleCallDir = output.resolve("module-call").also { it.mkdirs() }
+    private val ssacfgExtractDir = output.resolve("ssa-cfg-extract").also { it.mkdirs() }
 
-    println("========== ssa-cfg-extract ==========")
-    val ssacfgExtractProcess = ssacfgExtractProcessBuilder(config)
-    println(ssacfgExtractProcess.command())
-    val ssacfgExtractTime = calcTime {
-        ssacfgExtractProcess.start().waitFor()
-    }
+    fun run() {
+        println("========== module-call ==========")
+        val moduleCallProcess = moduleCallProcessBuilder()
+        println(moduleCallProcess.command())
+        val moduleCallTime = calcTime {
+            moduleCallProcess.start().waitFor()
+        }
 
-    println("========== summary ==========")
-    val result = Result(
-        config,
-        root,
-        ModuleCallResult(
+        println("========== ssa-cfg-extract ==========")
+        val ssacfgExtractProcess = ssacfgExtractProcessBuilder()
+        println(ssacfgExtractProcess.command())
+        val ssacfgExtractTime = calcTime {
+            ssacfgExtractProcess.start().waitFor()
+        }
+
+        println("========== summary ==========")
+        val result = Result(
+            config,
+            root,
+            output,
             moduleCallDir,
-            moduleCallTime,
-            MemoryRecordReader(moduleCallDir.resolve("recording.jfr")).load()
-        ),
-        SSACFGExtractResult(
             ssacfgExtractDir,
-            ssacfgExtractTime,
-            MemoryRecordReader(ssacfgExtractDir.resolve("recording.jfr")).load()
+            ModuleCallResult(
+                moduleCallDir,
+                moduleCallTime,
+                MemoryRecordReader(moduleCallDir.resolve("recording.jfr")).load()
+            ),
+            SSACFGExtractResult(
+                ssacfgExtractDir,
+                ssacfgExtractTime,
+                MemoryRecordReader(ssacfgExtractDir.resolve("recording.jfr")).load()
+            )
         )
-    )
-    ReportGenerator(result).generate()
-
-}
-
-private fun calcTime(block: () -> Unit): Duration {
-    val start = Instant.now()
-    block()
-    val end = Instant.now()
-    return Duration.between(start, end)
-}
-
-private fun moduleCallProcessBuilder(config: Config): ProcessBuilder {
-    return with(config) {
-        ProcessBuilder()
-            .command(
-                java, *vmArgs.toTypedArray(),
-                "-jar", jarFile.from(workingDir), moduleCallName,
-                "-a", androidLib.from(workingDir), "-i", apk.from(workingDir), *moduleCallArgs.toTypedArray()
-            )
-            .directory(File(workingDir).resolve("module-call"))
-            .inheritIO()
+        ReportGenerator(result).generate()
     }
-}
 
-private fun ssacfgExtractProcessBuilder(config: Config): ProcessBuilder {
-    return with(config) {
-        ProcessBuilder()
-            .command(
-                java, *vmArgs.toTypedArray(),
-                "-jar", jarFile.from(workingDir), ssacfgExtractName,
-                "-a", androidLib.from(workingDir), "-i", apk.from(workingDir), *ssacfgExtractArgs.toTypedArray()
-            )
-            .directory(File(workingDir).resolve("ssa-cfg-extract"))
-            .inheritIO()
+    private fun outputDir(root: File, outputDir: String): File {
+        val regex = """\$\{(.*)\}""".toRegex()
+        val result = regex.find(outputDir) ?: return root.resolve(outputDir)
+        val pattern = result.groupValues[1]
+
+        val format = DateTimeFormatter.ofPattern(pattern).format(LocalDateTime.now())
+        val dirname = regex.replaceFirst(outputDir, format)
+
+        return root.resolve(dirname)
     }
-}
 
-private fun String.from(dir: String): String = File(dir).resolve(this).absolutePath
+    private fun moduleCallProcessBuilder(): ProcessBuilder {
+        return with(config) {
+            ProcessBuilder()
+                .command(
+                    java, *vmArgs.toTypedArray(),
+                    "-jar", rootTo(jarFile), moduleCallName,
+                    "-a", rootTo(androidLib), "-i", rootTo(apk),
+                    *moduleCallArgs.toTypedArray()
+                )
+                .directory(moduleCallDir)
+                .inheritIO()
+        }
+    }
+
+    private fun ssacfgExtractProcessBuilder(): ProcessBuilder {
+        return with(config) {
+            ProcessBuilder()
+                .command(
+                    java, *vmArgs.toTypedArray(),
+                    "-jar", rootTo(jarFile), ssacfgExtractName,
+                    "-a", rootTo(androidLib), "-i", rootTo(apk),
+                    *ssacfgExtractArgs.toTypedArray()
+                )
+                .directory(ssacfgExtractDir)
+                .inheritIO()
+        }
+    }
+
+    private fun calcTime(block: () -> Unit): Duration {
+        val start = Instant.now()
+        block()
+        val end = Instant.now()
+        return Duration.between(start, end)
+    }
+
+    private fun rootTo(path: String) = root.resolve(path).absolutePath
+
+}

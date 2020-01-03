@@ -12,6 +12,9 @@ import java.time.Duration
 data class Result(
     val config: Config,
     val root: File,
+    val output: File,
+    val moduleCallDir: File,
+    val ssacfgExtractDir: File,
     val moduleCall: ModuleCallResult,
     val ssacfgExtract: SSACFGExtractResult
 )

@@ -10,6 +10,7 @@ import java.io.File
 data class Config(
     val java: String,
     val workingDir: String,
+    val outputDir: String,
     val jarFile: String,
     val vmArgs: List<String>,
     val androidLib: String,
@@ -33,7 +34,8 @@ data class Config(
 
             return Config(
                 obj["java"].string,
-                obj["working-directory"].string,
+                obj["working-dir"].string,
+                obj["output-dir"].string,
                 obj["jar"].string,
                 obj["vm-args"].array.map { it.string },
                 obj["android-lib"].string,

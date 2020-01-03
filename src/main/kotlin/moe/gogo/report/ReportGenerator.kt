@@ -2,7 +2,7 @@ package moe.gogo.report
 
 class ReportGenerator(val result: Result) {
 
-    val dist = result.root.resolve("report")
+    val dist = result.output
 
     fun generate() {
         if (!dist.exists()) {
