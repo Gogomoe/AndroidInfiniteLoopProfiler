@@ -10,8 +10,12 @@
     <script src="https://cdn.bootcss.com/viz.js/2.1.2-pre.1/full.render.js"></script>
 </head>
 <body>
-<section>
+<section id="summary">
     <h1>Summary</h1>
+    <p>Package ID: {{package-id}}</p>
+    <p>Total Cost Time: {{total-time}}</p>
+    <p>Loaded Class Count: {{ssa-cfg-extract-loaded-class-count}}</p>
+    <p>Recursion Count: {{ssa-cfg-extract-recursion-groups-count}}</p>
 </section>
 <section id="module-call">
     <h1>Module Call</h1>
@@ -25,6 +29,11 @@
     <h1>SSA CFG Extract</h1>
     <p>Cost Time: {{ssa-cfg-extract-time}}</p>
     <p>Max Heap Used: {{ssa-cfg-extract-max-heap}}</p>
+    <p>Apk Class Count: {{ssa-cfg-extract-apk-class-count}}</p>
+    <p>App Class Count: {{ssa-cfg-extract-app-class-count}}</p>
+    <p>Loaded Class Count: {{ssa-cfg-extract-loaded-class-count}}</p>
+    <p>Recursion Groups Count: {{ssa-cfg-extract-recursion-groups-count}}</p>
+    <p>Recursion Methods Count: {{ssa-cfg-extract-recursion-methods-count}}</p>
     <div id="ssa-cfg-extract-dot-graph"></div>
     <div id="ssa-cfg-extract-memory" style="width: 600px;height:400px;"></div>
     {{ssa-cfg-extract-flame-graph}}

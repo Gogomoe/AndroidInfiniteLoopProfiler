@@ -15,7 +15,9 @@
   "ssa-cfg-extract": {
     "name": "ssa-cfg-extract",
     "args": [
-      "--override-output"
+      "--override-output",
+      "--stat-output",
+      "stat.json"
     ]
   },
   "flame-graph": {

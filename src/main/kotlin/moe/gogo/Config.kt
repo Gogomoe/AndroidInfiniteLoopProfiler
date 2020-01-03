@@ -1,5 +1,9 @@
 package moe.gogo
 
+import com.github.salomonbrys.kotson.array
+import com.github.salomonbrys.kotson.bool
+import com.github.salomonbrys.kotson.obj
+import com.github.salomonbrys.kotson.string
 import com.google.gson.JsonParser
 import java.io.File
 
@@ -22,27 +26,27 @@ data class Config(
 ) {
     companion object {
         fun from(json: File): Config {
-            val obj = JsonParser.parseString(json.readText()).asJsonObject
+            val obj = JsonParser().parse(json.readText()).obj
             val moduleCell = obj.getAsJsonObject("module-call")
             val ssacfgExtract = obj.getAsJsonObject("ssa-cfg-extract")
             val flameGraph = obj.getAsJsonObject("flame-graph")
 
             return Config(
-                obj.getAsJsonPrimitive("java").asString,
-                obj.getAsJsonPrimitive("working-directory").asString,
-                obj.getAsJsonPrimitive("jar").asString,
-                obj.getAsJsonArray("vm-args").map { it.asString },
-                obj.getAsJsonPrimitive("android-lib").asString,
-                obj.getAsJsonPrimitive("apk").asString,
-                moduleCell.getAsJsonPrimitive("name").asString,
-                moduleCell.getAsJsonArray("args").map { it.asString },
-                ssacfgExtract.getAsJsonPrimitive("name").asString,
-                ssacfgExtract.getAsJsonArray("args").map { it.asString },
-                flameGraph.getAsJsonPrimitive("enable").asBoolean,
-                flameGraph.getAsJsonPrimitive("jfr-flame-graph").asString,
-                flameGraph.getAsJsonArray("jfr-flame-graph-args").map { it.asString },
-                flameGraph.getAsJsonPrimitive("flame-graph").asString,
-                flameGraph.getAsJsonArray("flame-graph-args").map { it.asString }
+                obj["java"].string,
+                obj["working-directory"].string,
+                obj["jar"].string,
+                obj["vm-args"].array.map { it.string },
+                obj["android-lib"].string,
+                obj["apk"].string,
+                moduleCell["name"].string,
+                moduleCell["args"].array.map { it.string },
+                ssacfgExtract["name"].string,
+                ssacfgExtract["args"].array.map { it.string },
+                flameGraph["enable"].bool,
+                flameGraph["jfr-flame-graph"].string,
+                flameGraph["jfr-flame-graph-args"].array.map { it.string },
+                flameGraph["flame-graph"].string,
+                flameGraph["flame-graph-args"].array.map { it.string }
             )
         }
     }

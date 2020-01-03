@@ -6,6 +6,9 @@ class ReportGenerator(val result: Result) {
 
     private val templates: List<Pair<String, () -> String>> = with(result) {
         listOf(
+            "{{package-id}}" to { ssacfgExtract.packageId },
+            "{{total-time}}" to { (ssacfgExtract.costTime + moduleCall.costTime).toMillis().toString() },
+
             "{{module-call-time}}" to { moduleCall.costTime.toMillis().toString() },
             "{{module-call-max-heap}}" to { moduleCall.maxHeap.toString() },
             "{{module-call-dot-graph-js}}" to {
@@ -17,8 +20,14 @@ class ReportGenerator(val result: Result) {
             "{{module-call-flame-graph}}" to {
                 FlameGraphGenerator(config, moduleCall.jfr).generate()
             },
+
             "{{ssa-cfg-extract-time}}" to { ssacfgExtract.costTime.toMillis().toString() },
             "{{ssa-cfg-extract-max-heap}}" to { ssacfgExtract.maxHeap.toString() },
+            "{{ssa-cfg-extract-apk-class-count}}" to { ssacfgExtract.apkClassCount.toString() },
+            "{{ssa-cfg-extract-app-class-count}}" to { ssacfgExtract.appClassCount.toString() },
+            "{{ssa-cfg-extract-loaded-class-count}}" to { ssacfgExtract.loadedClassCount.toString() },
+            "{{ssa-cfg-extract-recursion-groups-count}}" to { ssacfgExtract.recursionGroupsCount.toString() },
+            "{{ssa-cfg-extract-recursion-methods-count}}" to { ssacfgExtract.recursionMethodsCount.toString() },
             "{{ssa-cfg-extract-graph-js}}" to {
                 DotGraphRender("ssa-cfg-extract-dot-graph", ssacfgExtract.dot.readText()).render()
             },
@@ -36,11 +45,22 @@ class ReportGenerator(val result: Result) {
             dist.mkdir()
         }
 
-        var report = String(getResource("Report.html").readAllBytes())
+        var reportTamplate = String(getResource("Report.html").readAllBytes())
         templates.forEach { (template, result) ->
-            report = report.replace(template, result())
+            reportTamplate = reportTamplate.replace(template, result())
         }
-        dist.resolve("Report.html").writeBytes(report.toByteArray())
+
+        val report = dist.resolve("Report.html")
+        report.writeBytes(reportTamplate.toByteArray())
+
+        with(result) {
+            println("Package ID: ${ssacfgExtract.packageId}")
+            println("Total Cost Time: ${(ssacfgExtract.costTime + moduleCall.costTime).toMillis()}")
+            println("Loaded Class Count: ${ssacfgExtract.loadedClassCount}")
+            println("Recursion Count: ${ssacfgExtract.recursionGroupsCount}")
+        }
+
+        println("Report save at ${report.absolutePath}")
     }
 
 }
