@@ -6,19 +6,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@4.6.0/dist/echarts.min.js"></script>
 
+    <script src="https://cdn.bootcss.com/viz.js/2.1.2-pre.1/viz.js"></script>
+    <script src="https://cdn.bootcss.com/viz.js/2.1.2-pre.1/full.render.js"></script>
 </head>
 <body>
 <section>
     <h1>Summary</h1>
 </section>
-<section>
+<section id="module-call">
     <h1>Module Call</h1>
     <p>Cost Time: {{module-call-time}}</p>
     <p>Max Heap Used: {{module-call-max-heap}}</p>
+    <div id="module-call-dot-graph"></div>
     <div id="module-call-memory" style="width: 600px;height:400px;"></div>
     {{module-call-flame-graph}}
 </section>
-<section>
+<section id="ssa-cfg-extract">
     <h1>SSA CFG Extract</h1>
     <p>Cost Time: {{ssa-cfg-extract-time}}</p>
     <p>Max Heap Used: {{ssa-cfg-extract-max-heap}}</p>
@@ -30,5 +33,6 @@
 <script>
     {{module-call-memory-chart-js}}
     {{ssa-cfg-extract-memory-chart-js}}
+    {{module-call-dot-graph-js}}
 </script>
 </html>

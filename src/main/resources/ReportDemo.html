@@ -6,9 +6,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@4.6.0/dist/echarts.min.js"></script>
 
+    <script src="https://cdn.bootcss.com/viz.js/2.1.2-pre.1/viz.js"></script>
+    <script src="https://cdn.bootcss.com/viz.js/2.1.2-pre.1/full.render.js"></script>
 </head>
 <body>
 <div id="memory-chart" style="width: 600px;height:400px;"></div>
+<div id="dot-chart"></div>
 </body>
 <script>
     echarts.init(document.getElementById('memory-chart')).setOption({
@@ -101,5 +104,36 @@
             }
         ]
     });
+</script>
+
+<script>
+    let viz = new Viz();
+    viz.renderSVGElement('digraph "./ModuleCallGraph.dot" {\n' +
+        '    "com.example.mcgbenchmark.seventhActivity" [color=red,];\n' +
+        '    "com.example.mcgbenchmark.secondActivity" [color=red,];\n' +
+        '    "com.example.mcgbenchmark.firstActivity" [color=red,];\n' +
+        '    "com.example.mcgbenchmark.firstActivity"->"com.example.mcgbenchmark.secondActivity" [color=red,];\n' +
+        '    "com.example.mcgbenchmark.secondActivity"->"com.example.mcgbenchmark.seventhActivity" [color=red,];\n' +
+        '    "com.example.mcgbenchmark.seventhActivity"->"com.example.mcgbenchmark.firstActivity" [color=red,];\n' +
+        '    "com.example.mcgbenchmark.MainActivity"\n' +
+        '    "com.example.mcgbenchmark.thirdActivity"\n' +
+        '    "com.example.mcgbenchmark.fourthActivity"\n' +
+        '    "com.example.mcgbenchmark.fifthActivity"\n' +
+        '    "com.example.mcgbenchmark.sixthActivity"\n' +
+        '    "com.example.mcgbenchmark.eighthActivity"\n' +
+        '    "com.example.mcgbenchmark.MainActivity"->"com.example.mcgbenchmark.firstActivity";\n' +
+        '    "com.example.mcgbenchmark.MainActivity"->"com.example.mcgbenchmark.secondActivity";\n' +
+        '    "com.example.mcgbenchmark.MainActivity"->"com.example.mcgbenchmark.thirdActivity";\n' +
+        '    "com.example.mcgbenchmark.MainActivity"->"com.example.mcgbenchmark.fourthActivity";\n' +
+        '    "com.example.mcgbenchmark.fourthActivity"->"com.example.mcgbenchmark.fifthActivity";\n' +
+        '    "com.example.mcgbenchmark.fourthActivity"->"com.example.mcgbenchmark.sixthActivity";\n' +
+        '    "com.example.mcgbenchmark.secondActivity"->"com.example.mcgbenchmark.eighthActivity";\n' +
+        '    "com.example.mcgbenchmark.thirdActivity"->"com.example.mcgbenchmark.seventhActivity";\n' +
+        '    "com.example.mcgbenchmark.thirdActivity"->"com.example.mcgbenchmark.eighthActivity";\n' +
+        '}\n')
+        .then(function (element) {
+            element.setAttribute("width", "800");
+            document.querySelector("#dot-chart").appendChild(element);
+        });
 </script>
 </html>

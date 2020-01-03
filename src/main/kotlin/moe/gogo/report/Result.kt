@@ -8,17 +8,25 @@ import java.time.Duration
 data class Result(
     val config: Config,
     val root: File,
-    val moduleCallDir: File,
-    val moduleCallTime: Duration,
-    val moduleCallMemory: MemoryRecord,
-    val ssacfgExtractDir: File,
-    val ssacfgExtractTime: Duration,
-    val ssacfgExtractMemory: MemoryRecord
+    val moduleCall: ModuleCallResult,
+    val ssacfgExtract: SSACFGExtractResult
+)
+
+data class ModuleCallResult(
+    val dir: File,
+    val costTime: Duration,
+    val memory: MemoryRecord
 ) {
-    val moduleCallMaxHeap: Long = moduleCallMemory.record.map { it.used }.max()!!
-    val moduleCallJFR: File = moduleCallDir.resolve("recording.jfr")
+    val maxHeap: Long = memory.record.map { it.used }.max()!!
+    val jfr: File = dir.resolve("recording.jfr")
+    val dot: File = dir.resolve("ModuleCallGraph.dot")
+}
 
-    val ssacfgExtractMaxHeap: Long = ssacfgExtractMemory.record.map { it.used }.max()!!
-    val ssacfgExtractJFR: File = ssacfgExtractDir.resolve("recording.jfr")
-
+data class SSACFGExtractResult(
+    val dir: File,
+    val costTime: Duration,
+    val memory: MemoryRecord
+) {
+    val maxHeap: Long = memory.record.map { it.used }.max()!!
+    val jfr: File = dir.resolve("recording.jfr")
 }

@@ -6,21 +6,24 @@ class ReportGenerator(val result: Result) {
 
     private val templates: List<Pair<String, () -> String>> = with(result) {
         listOf(
-            "{{module-call-time}}" to { moduleCallTime.toMillis().toString() },
-            "{{module-call-max-heap}}" to { moduleCallMaxHeap.toString() },
+            "{{module-call-time}}" to { moduleCall.costTime.toMillis().toString() },
+            "{{module-call-max-heap}}" to { moduleCall.maxHeap.toString() },
             "{{module-call-memory-chart-js}}" to {
-                MemoryChartGenerator("module-call-memory", moduleCallMemory).generate()
+                MemoryChartGenerator("module-call-memory", moduleCall.memory).generate()
             },
             "{{module-call-flame-graph}}" to {
-                FlameGraphGenerator(config, moduleCallJFR).generate()
+                FlameGraphGenerator(config, moduleCall.jfr).generate()
             },
-            "{{ssa-cfg-extract-time}}" to { ssacfgExtractTime.toMillis().toString() },
-            "{{ssa-cfg-extract-max-heap}}" to { ssacfgExtractMaxHeap.toString() },
+            "{{module-call-dot-graph-js}}" to {
+                DotGraphRender("module-call-dot-graph", moduleCall.dot.readText()).render()
+            },
+            "{{ssa-cfg-extract-time}}" to { ssacfgExtract.costTime.toMillis().toString() },
+            "{{ssa-cfg-extract-max-heap}}" to { ssacfgExtract.maxHeap.toString() },
             "{{ssa-cfg-extract-memory-chart-js}}" to {
-                MemoryChartGenerator("ssa-cfg-extract-memory", ssacfgExtractMemory).generate()
+                MemoryChartGenerator("ssa-cfg-extract-memory", ssacfgExtract.memory).generate()
             },
             "{{ssa-cfg-extract-flame-graph}}" to {
-                FlameGraphGenerator(config, ssacfgExtractJFR).generate()
+                FlameGraphGenerator(config, ssacfgExtract.jfr).generate()
             }
         )
     }

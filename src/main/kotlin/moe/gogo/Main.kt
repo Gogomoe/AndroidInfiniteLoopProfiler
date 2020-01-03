@@ -2,8 +2,10 @@ package moe.gogo
 
 import com.beust.klaxon.Klaxon
 import moe.gogo.jfr.MemoryRecordReader
+import moe.gogo.report.ModuleCallResult
 import moe.gogo.report.ReportGenerator
 import moe.gogo.report.Result
+import moe.gogo.report.SSACFGExtractResult
 import java.io.File
 import java.time.Duration
 import java.time.Instant
@@ -35,12 +37,16 @@ fun main() {
     val result = Result(
         config,
         root,
-        moduleCallDir,
-        moduleCallTime,
-        MemoryRecordReader(moduleCallDir.resolve("recording.jfr")).load(),
-        ssacfgExtractDir,
-        ssacfgExtractTime,
-        MemoryRecordReader(ssacfgExtractDir.resolve("recording.jfr")).load()
+        ModuleCallResult(
+            moduleCallDir,
+            moduleCallTime,
+            MemoryRecordReader(moduleCallDir.resolve("recording.jfr")).load()
+        ),
+        SSACFGExtractResult(
+            ssacfgExtractDir,
+            ssacfgExtractTime,
+            MemoryRecordReader(ssacfgExtractDir.resolve("recording.jfr")).load()
+        )
     )
     ReportGenerator(result).generate()
 
