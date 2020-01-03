@@ -1,18 +1,12 @@
 package moe.gogo.report
 
-class DotGraphRender(val id: String, val dot: String) {
+class DotGraphRender(private val id: String, private val dot: String) : ReportRender() {
 
-    private val templates: List<Pair<String, () -> String>> = listOf(
+    override val template: String = readString("dot-graph-template.js")
+
+    override val data: List<Pair<String, () -> String>> = listOf(
         "{{dot-graph-id}}" to { id },
         "{{dot-graph}}" to { dot }
     )
 
-    fun render(): String {
-        var graphJs = String(getResource("dot-graph-template.js").readAllBytes())
-        templates.forEach { (template, result) ->
-            graphJs = graphJs.replace(template, result())
-        }
-
-        return graphJs
-    }
 }

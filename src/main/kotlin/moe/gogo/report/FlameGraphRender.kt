@@ -3,7 +3,9 @@ package moe.gogo.report
 import moe.gogo.Config
 import java.io.File
 
-class FlameGraphGenerator(val config: Config, val jfr: File) {
+class FlameGraphRender(private val config: Config, private val jfr: File) : ReportRender() {
+
+    override val template: String by lazy { generate() }
 
     fun generate(): String {
         if (!config.enableFlameGraph) {
@@ -11,7 +13,16 @@ class FlameGraphGenerator(val config: Config, val jfr: File) {
         }
         val dir = jfr.parentFile
         val jfrFlameGraphFile = dir.resolve("jfr-flame-graph.txt")
-        val jfrProcess = with(config) {
+        val flameGraphFile = dir.resolve("flame-graph.svg")
+
+        jfrFlameGraph(jfrFlameGraphFile, dir).start().waitFor()
+        flameGraphFile(dir, jfrFlameGraphFile, flameGraphFile).start().waitFor()
+
+        return extractSVGElement(flameGraphFile)
+    }
+
+    private fun jfrFlameGraph(jfrFlameGraphFile: File, dir: File?): ProcessBuilder {
+        return with(config) {
             ProcessBuilder()
                 .command(
                     jfrFlameGraph,
@@ -22,10 +33,10 @@ class FlameGraphGenerator(val config: Config, val jfr: File) {
                 .directory(dir)
                 .inheritIO()
         }
-        jfrProcess.start().waitFor()
+    }
 
-        val flameGraphFile = dir.resolve("flame-graph.svg")
-        val flameProcess = with(config) {
+    private fun flameGraphFile(dir: File?, jfrFlameGraphFile: File, flameGraphFile: File): ProcessBuilder {
+        return with(config) {
             ProcessBuilder()
                 .command(
                     flameGraph,
@@ -35,13 +46,13 @@ class FlameGraphGenerator(val config: Config, val jfr: File) {
                 .redirectInput(jfrFlameGraphFile)
                 .redirectOutput(flameGraphFile)
         }
-        flameProcess.start().waitFor()
+    }
 
+    private fun extractSVGElement(flameGraphFile: File): String {
         val flameGraphStr = flameGraphFile.readText()
         val svgStart = flameGraphStr.indexOf("<svg")
         val svgEnd = flameGraphStr.lastIndexOf("</svg>") + 6
         check(svgStart >= 0 && svgEnd >= 0 && svgEnd >= svgStart) { "error svg position" }
-
         return flameGraphStr.substring(svgStart, svgEnd)
     }
 
