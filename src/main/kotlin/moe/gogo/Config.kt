@@ -15,8 +15,7 @@ data class Config(
     val vmArgs: List<String>,
     val androidLib: String,
     val apk: String,
-    val ssacfgExtractName: String,
-    val ssacfgExtractArgs: List<String>,
+    val args: List<String>,
     val enableFlameGraph: Boolean,
     val jfrFlameGraph: String,
     val jfrFlameGraphArgs: List<String>,
@@ -26,8 +25,6 @@ data class Config(
     companion object {
         fun from(json: File): Config {
             val obj = JsonParser().parse(json.readText()).obj
-            val moduleCell = obj.getAsJsonObject("module-call")
-            val ssacfgExtract = obj.getAsJsonObject("ssa-cfg-extract")
             val flameGraph = obj.getAsJsonObject("flame-graph")
 
             return Config(
@@ -38,8 +35,7 @@ data class Config(
                 obj["vm-args"].array.map { it.string },
                 obj["android-lib"].string,
                 obj["apk"].string,
-                ssacfgExtract["name"].string,
-                ssacfgExtract["args"].array.map { it.string },
+                obj["args"].array.map { it.string },
                 flameGraph["enable"].bool,
                 flameGraph["jfr-flame-graph"].string,
                 flameGraph["jfr-flame-graph-args"].array.map { it.string },

@@ -8,15 +8,12 @@
     "-XX:StartFlightRecording=filename=recording.jfr,dumponexit=true"
   ],
   "android-lib": "android.jar",
-  "apk": "app-release-unsigned.apk",
-  "ssa-cfg-extract": {
-    "name": "ssa-cfg-extract",
-    "args": [
-      "--override-output",
-      "--stat-output",
-      "stat.json"
-    ]
-  },
+  "apk": "demo.apk",
+  "args": [
+    "--override-output",
+    "--stat-output",
+    "stat.json"
+  ],
   "flame-graph": {
     "enable": false,
     "jfr-flame-graph": "C:/Users/gogo/Desktop/jfr-flame-graph/build/install/jfr-flame-graph/bin/jfr-flame-graph",

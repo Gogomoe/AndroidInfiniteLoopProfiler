@@ -5,7 +5,6 @@ import moe.gogo.report.ReportGenerator
 import moe.gogo.report.Result
 import moe.gogo.report.SSACFGExtractResult
 import java.io.File
-import java.nio.file.Path
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
@@ -69,9 +68,9 @@ class Main {
             ProcessBuilder()
                 .command(
                     java, *vmArgs.toTypedArray(),
-                    "-jar", rootTo(jarFile), ssacfgExtractName,
+                    "-jar", rootTo(jarFile),
                     "-a", rootTo(androidLib), "-i", rootTo(apk),
-                    *ssacfgExtractArgs.toTypedArray()
+                    *args.toTypedArray()
                 )
                 .directory(ssacfgExtractDir)
                 .inheritIO()
