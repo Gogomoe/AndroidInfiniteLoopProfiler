@@ -5,6 +5,7 @@ import moe.gogo.report.ReportGenerator
 import moe.gogo.report.Result
 import moe.gogo.report.SSACFGExtractResult
 import java.io.File
+import java.nio.file.Path
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
@@ -45,12 +46,20 @@ class Main {
     }
 
     private fun outputDir(root: File, outputDir: String): File {
-        val regex = """\$\{(.*)\}""".toRegex()
-        val result = regex.find(outputDir) ?: return root.resolve(outputDir)
-        val pattern = result.groupValues[1]
+        val formatter = listOf<Pair<Regex, (MatchResult) -> String>>(
+            """\$\{Date:(.*?)}""".toRegex() to { result ->
+                val pattern = result.groupValues[1]
+                DateTimeFormatter.ofPattern(pattern).format(LocalDateTime.now())
+            },
+            """\$\{apk}""".toRegex() to { result ->
+                root.resolve(config.apk).name
+            }
+        )
 
-        val format = DateTimeFormatter.ofPattern(pattern).format(LocalDateTime.now())
-        val dirname = regex.replaceFirst(outputDir, format)
+        var dirname = outputDir
+        formatter.forEach { (matcher, transform) ->
+            dirname = matcher.replace(dirname, transform)
+        }
 
         return root.resolve(dirname)
     }

@@ -1,7 +1,7 @@
 {
   "java": "C:/Program Files/Java/jdk1.8.0_231/bin/java.exe",
   "working-dir": "C:/Users/gogo/Desktop/tmp",
-  "output-dir": "report_${yyMMdd_HHmmss}",
+  "output-dir": "report_${Date:yyyyMMdd_HHmmss}_${apk}",
   "jar": "ssa-cfg-extractor-1.0-SNAPSHOT-jar-with-dependencies.jar",
   "vm-args": [
     "-XX:+UnlockCommercialFeatures",
