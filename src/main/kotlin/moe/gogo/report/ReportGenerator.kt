@@ -15,10 +15,10 @@ class ReportGenerator(val result: Result) {
         report.writeBytes(render.render().toByteArray())
 
         with(result) {
-            println("Package ID: ${ssacfgExtract.packageId}")
-            println("Total Cost Time: ${ssacfgExtract.costTime.toMillis()}")
-            println("Loaded Class Count: ${ssacfgExtract.loadedClassCount}")
-            println("Recursion Count: ${ssacfgExtract.recursionGroupsCount}")
+            println("Package ID: $packageId")
+            println("Total Cost Time: ${costTime.toMillis()}")
+            println("Loaded Class Count: $loadedClassCount")
+            println("Recursion Count: $recursionGroupsCount")
         }
 
         println("Report save at ${report.absolutePath}")

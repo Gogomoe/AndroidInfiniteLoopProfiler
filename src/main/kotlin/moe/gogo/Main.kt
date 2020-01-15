@@ -3,7 +3,6 @@ package moe.gogo
 import moe.gogo.jfr.MemoryRecordReader
 import moe.gogo.report.ReportGenerator
 import moe.gogo.report.Result
-import moe.gogo.report.SSACFGExtractResult
 import java.io.File
 import java.time.Duration
 import java.time.Instant
@@ -18,12 +17,11 @@ class Main {
 
     private val config: Config = Config.from(File("config.json"))
     private val root: File = File(config.workingDir)
-    private val output: File = outputDir(root, config.outputDir)
-    private val ssacfgExtractDir = output.resolve("ssa-cfg-extract").also { it.mkdirs() }
+    private val output: File = outputDir(root, config.outputDir).also { it.mkdirs() }
 
     fun run() {
 
-        println("========== ssa-cfg-extract ==========")
+        println("========== run ==========")
         val ssacfgExtractProcess = ssacfgExtractProcessBuilder()
         println(ssacfgExtractProcess.command())
         val ssacfgExtractTime = calcTime {
@@ -35,11 +33,8 @@ class Main {
             config,
             root,
             output,
-            SSACFGExtractResult(
-                ssacfgExtractDir,
-                ssacfgExtractTime,
-                MemoryRecordReader(ssacfgExtractDir.resolve("recording.jfr")).load()
-            )
+            ssacfgExtractTime,
+            MemoryRecordReader(output.resolve("recording.jfr")).load()
         )
         ReportGenerator(result).generate()
     }
@@ -72,7 +67,7 @@ class Main {
                     "-a", rootTo(androidLib), "-i", rootTo(apk),
                     *args.toTypedArray()
                 )
-                .directory(ssacfgExtractDir)
+                .directory(output)
                 .inheritIO()
         }
     }

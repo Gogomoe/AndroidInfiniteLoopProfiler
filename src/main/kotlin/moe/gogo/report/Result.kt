@@ -13,18 +13,13 @@ data class Result(
     val config: Config,
     val root: File,
     val output: File,
-    val ssacfgExtract: SSACFGExtractResult
-)
-
-data class SSACFGExtractResult(
-    val dir: File,
     val costTime: Duration,
     val memory: MemoryRecord
 ) {
     val maxHeap: Long = memory.record.map { it.used }.max()!!
-    val jfr: File = dir.resolve("recording.jfr")
-    val methodCallDot: File = dir.resolve("ssaOutput").resolve("call-graph.dot")
-    val moduleCallDot: File = dir.resolve("ssaOutput").resolve("module-cg.dot")
+    val jfr: File = output.resolve("recording.jfr")
+    val methodCallDot: File = output.resolve("ssaOutput").resolve("call-graph.dot")
+    val moduleCallDot: File = output.resolve("ssaOutput").resolve("module-cg.dot")
 
     val packageId: String
     val apkClassCount: Int
@@ -38,7 +33,7 @@ data class SSACFGExtractResult(
     val moduleRecursionModuleCount: Int
 
     init {
-        val stat: File = dir.resolve("stat.json")
+        val stat: File = output.resolve("stat.json")
         val obj = JsonParser().parse(stat.readText()).obj
         packageId = obj["packageId"].string
         apkClassCount = obj["apkClassCount"].int
