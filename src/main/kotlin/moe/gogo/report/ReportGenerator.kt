@@ -19,6 +19,8 @@ class ReportGenerator(val result: Result) {
             println("Total Cost Time: ${costTime.toMillis()}")
             println("Loaded Class Count: $loadedClassCount")
             println("Recursion Count: $recursionGroupsCount")
+            println("Module Recursion Count: $moduleRecursionGroupsCount")
+            println("Loop Methods Count: ${loopCFG.size}")
         }
 
         println("Report save at ${report.absolutePath}")

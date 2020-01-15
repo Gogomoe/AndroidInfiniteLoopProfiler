@@ -32,6 +32,10 @@ data class Result(
     val moduleRecursionGroupsCount: Int
     val moduleRecursionModuleCount: Int
 
+    val loopCFG: List<File> = output.resolve("ssaOutput").resolve("loop_cfgs").listFiles { file ->
+        file.name.endsWith(".dot")
+    }!!.toList()
+
     init {
         val stat: File = output.resolve("stat.json")
         val obj = JsonParser().parse(stat.readText()).obj

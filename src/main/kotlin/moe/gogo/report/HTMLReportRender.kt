@@ -20,6 +20,7 @@ class HTMLReportRender(private val result: Result) : ReportRender() {
             "{{module-transition-count}}" to { moduleTransitionCount.toString() },
             "{{module-recursion-groups-count}}" to { moduleRecursionGroupsCount.toString() },
             "{{module-recursion-modules-count}}" to { moduleRecursionModuleCount.toString() },
+            "{{loop-method-count}}" to { loopCFG.size.toString() },
             "{{method-call-dot-graph-js}}" to {
                 DotGraphRender("method-call-dot-graph", methodCallDot.readText()).render()
             },
