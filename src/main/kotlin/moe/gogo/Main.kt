@@ -9,13 +9,13 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-fun main() {
-    Main().run()
+fun main(args: Array<String>) {
+    Main(args).run()
 }
 
-class Main {
+class Main(private val args: Array<String>) {
 
-    private val config: Config = Config.from(File("config.json"))
+    private val config: Config = Config.from(args, File("config.json"))
     private val root: File = File(config.workingDir)
     private val output: File = outputDir(root, config.outputDir).also { it.mkdirs() }
 
